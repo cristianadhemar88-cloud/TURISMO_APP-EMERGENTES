@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}
+Inicio Cliente
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+
+        <div class="card-body text-center">
+
+            <h1 class="display-5">
+                Bienvenido {{ current_user.nombre }}
+            </h1>
+
+            <p class="lead">
+                Explora los mejores destinos turísticos de Bolivia
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- DESTINOS -->
+
+    <h3 class="mb-3">
+        🌎 Destinos Destacados
+    </h3>
+
+    <div class="row">
+
+        {% for destino in destinos %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ destino.nombre }}
+                    </h5>
+
+                    <h6 class="text-muted">
+                        {{ destino.departamento }}
+                    </h6>
+
+                    <p>
+                        {{ destino.descripcion }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- PAQUETES -->
+
+    <h3 class="mb-3 mt-5">
+        🎒 Paquetes Turísticos
+    </h3>
+
+    <div class="row">
+
+        {% for paquete in paquetes %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card border-success shadow h-100">
+
+                <div class="card-body">
+
+                    <h5>
+                        {{ paquete.nombre }}
+                    </h5>
+
+                    <p>
+                        {{ paquete.descripcion }}
+                    </p>
+
+                    <h4 class="text-success">
+                        Bs. {{ paquete.precio }}
+                    </h4>
+
+                    <small>
+                        Duración:
+                        {{ paquete.duracion }}
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- MAPA -->
+
+    <div class="card shadow mt-5">
+
+        <div class="card-header bg-info text-white">
+
+            <h4>
+                🗺️ Mapa de Destinos Turísticos
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <div
+                id="mapaCliente"
+                style="height:500px;">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+var mapa = L.map('mapaCliente')
+.setView([-16.5, -68.15], 6);
+
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; OpenStreetMap'
+    }
+).addTo(mapa);
+
+{% for destino in destinos %}
+
+L.marker([
+    {{ destino.latitud }},
+    {{ destino.longitud }}
+])
+.addTo(mapa)
+.bindPopup(
+    "<b>{{ destino.nombre }}</b><br>{{ destino.departamento }}"
+);
+
+{% endfor %}
+
+</script>
+
+{% endblock %}

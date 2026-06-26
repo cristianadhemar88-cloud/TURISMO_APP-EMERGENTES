@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Destinos Turísticos</h2>
+
+{% if current_user.rol.nombre != "Cliente" %}
+<a href="/destinos/nuevo" class="btn btn-primary">
+    Nuevo
+</a>
+{% endif %}
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Departamento</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for destino in destinos %}
+
+    <tr>
+        <td>{{ destino.id }}</td>
+        <td>{{ destino.nombre }}</td>
+        <td>{{ destino.departamento }}</td>
+        <td>{{ destino.latitud }}</td>
+        <td>{{ destino.longitud }}</td>
+
+        <td>
+
+            {% if current_user.rol.nombre != "Cliente" %}
+
+                <a href="/destinos/editar/{{ destino.id }}"
+                    class="btn btn-warning btn-sm">
+                        Editar
+                </a>
+
+                <a href="/destinos/eliminar/{{ destino.id }}"
+                    class="btn btn-danger btn-sm">
+                        Eliminar
+                </a>
+
+            {% else %}
+
+                <span class="text-muted">
+                    Solo lectura
+                </span>
+
+            {% endif %}
+
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

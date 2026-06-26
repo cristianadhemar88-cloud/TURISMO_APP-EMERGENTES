@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Facturas</h2>
+
+{% if current_user.rol.nombre != "Cliente" %}
+<a href="/facturas/nuevo" class="btn btn-primary">
+    Nuevo
+</a>
+{% endif %}
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for factura in facturas %}
+
+        <tr>
+
+            <td>{{ factura.id }}</td>
+            <td>{{ factura.numero }}</td>
+            <td>
+                {{ factura.pago.reserva.cliente.nombre }}
+                {{ factura.pago.reserva.cliente.apellido }}
+            </td>
+            <td>{{ factura.fecha }}</td>
+            <td>Bs. {{ factura.total }}</td>
+
+        
+
+            <td>
+
+                {% if current_user.rol.nombre != "Cliente" %}
+
+                    <a
+                        href="/facturas/pdf/{{ factura.id }}"
+                        class="btn btn-info btn-sm"
+                        target="_blank">
+                            PDF
+                    </a>
+
+                    <a href="/facturas/editar/{{ factura.id }}"
+                        class="btn btn-warning btn-sm">
+                            Editar
+                    </a>
+
+                    <a href="/facturas/eliminar/{{ factura.id }}"
+                        class="btn btn-danger btn-sm">
+                            Eliminar
+                    </a>
+
+                {% else %}
+
+                    <span class="text-muted">
+                        Solo lectura
+                    </span>
+
+                {% endif %}
+
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

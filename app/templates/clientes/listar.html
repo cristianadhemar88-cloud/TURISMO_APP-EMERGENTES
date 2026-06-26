@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Clientes</h2>
+
+<a href="/clientes/nuevo" class="btn btn-primary mb-3">
+    Nuevo Cliente
+</a>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>CI</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for cliente in clientes %}
+
+    <tr>
+        <td>{{ cliente.id }}</td>
+        <td>{{ cliente.nombre }}</td>
+        <td>{{ cliente.apellido }}</td>
+        <td>{{ cliente.telefono }}</td>
+        <td>{{ cliente.correo }}</td>
+        <td>{{ cliente.ci }}</td>
+
+        <td>
+            <a href="/clientes/editar/{{ cliente.id }}"
+               class="btn btn-warning btn-sm">
+                Editar
+            </a>
+
+            <a href="/clientes/eliminar/{{ cliente.id }}"
+               class="btn btn-danger btn-sm">
+                Eliminar
+            </a>
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

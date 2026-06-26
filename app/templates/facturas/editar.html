@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Editar Factura</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+
+        <label>Número Factura</label>
+
+        <input
+            type="text"
+            name="numero"
+            class="form-control"
+            value="{{ factura.numero }}"
+            required>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Fecha</label>
+
+        <input
+            type="date"
+            name="fecha"
+            class="form-control"
+            value="{{ factura.fecha }}"
+            required>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Total</label>
+
+        <input
+            type="number"
+            step="0.01"
+            name="total"
+            class="form-control"
+            value="{{ factura.total }}"
+            required>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Pago</label>
+
+        <select
+            name="pago_id"
+            class="form-control">
+
+            {% for pago in pagos %}
+
+            <option
+                value="{{ pago.id }}"
+                {% if pago.id == factura.pago_id %}
+                selected
+                {% endif %}>
+
+                Pago #{{ pago.id }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <button
+        class="btn btn-warning">
+
+        Actualizar
+
+    </button>
+
+</form>
+
+{% endblock %}

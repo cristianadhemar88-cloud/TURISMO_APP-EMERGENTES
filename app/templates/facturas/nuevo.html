@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Nueva Factura</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+
+        <label>Fecha</label>
+
+        <input
+            type="date"
+            name="fecha"
+            class="form-control"
+            required>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Total</label>
+
+        <input
+            type="number"
+            step="0.01"
+            name="total"
+            id="total"
+            class="form-control"
+            readonly>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Pago / Cliente</label>
+
+        <select
+            name="pago_id"
+            id="pago_id"
+            class="form-control"
+            required>
+
+            {% for pago in pagos %}
+
+            <option
+                value="{{ pago.id }}"
+                data-monto="{{ pago.monto }}">
+
+                Cliente:
+                {{ pago.reserva.cliente.nombre }}
+                {{ pago.reserva.cliente.apellido }}
+
+                | Pago #{{ pago.id }}
+
+                | Bs. {{ pago.monto }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <button
+        class="btn btn-success">
+
+        Guardar Factura
+
+    </button>
+
+</form>
+
+<script>
+
+const pagoSelect =
+document.getElementById("pago_id");
+
+const totalInput =
+document.getElementById("total");
+
+function actualizarTotal() {
+
+    const opcion =
+    pagoSelect.options[pagoSelect.selectedIndex];
+
+    totalInput.value =
+    opcion.dataset.monto;
+
+}
+
+actualizarTotal();
+
+pagoSelect.addEventListener(
+    "change",
+    actualizarTotal
+);
+
+</script>
+
+{% endblock %}

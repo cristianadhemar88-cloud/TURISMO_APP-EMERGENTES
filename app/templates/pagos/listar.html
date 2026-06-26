@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Pagos</h2>
+
+{% if current_user.rol.nombre != "Cliente" %}
+<a href="/pagos/nuevo" class="btn btn-primary">
+    Nuevo
+</a>
+{% endif %}
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Reserva</th>
+            <th>Monto</th>
+            <th>Método</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for pago in pagos %}
+
+    <tr>
+
+        <td>{{ pago.id }}</td>
+
+        <td>
+            {{ pago.reserva.cliente.nombre }}
+        </td>
+
+        <td>{{ pago.monto }}</td>
+
+        <td>{{ pago.metodo_pago }}</td>
+
+        <td>{{ pago.fecha_pago }}</td>
+
+        <td>{{ pago.estado }}</td>
+
+        <td>
+
+            {% if current_user.rol.nombre != "Cliente" %}
+
+                <a href="/pagos/editar/{{ pago.id }}"
+                    class="btn btn-warning btn-sm">
+                        Editar
+                </a>
+
+                <a href="/pagos/eliminar/{{ pago.id }}"
+                    class="btn btn-danger btn-sm">
+                        Eliminar
+                </a>
+
+            {% else %}
+
+                <span class="text-muted">
+                    Solo lectura
+                </span>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

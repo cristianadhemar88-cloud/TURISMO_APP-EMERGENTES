@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Editar Paquete</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        <input type="text"
+               name="nombre"
+               class="form-control"
+               value="{{ paquete.nombre }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        <textarea name="descripcion"
+                  class="form-control">{{ paquete.descripcion }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Precio</label>
+        <input type="number"
+               step="0.01"
+               name="precio"
+               class="form-control"
+               value="{{ paquete.precio }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Duración</label>
+        <input type="text"
+               name="duracion"
+               class="form-control"
+               value="{{ paquete.duracion }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Destino</label>
+
+        <select name="destino_id"
+                class="form-control">
+
+            {% for destino in destinos %}
+
+            <option value="{{ destino.id }}"
+            {% if destino.id == paquete.destino_id %}
+                selected
+            {% endif %}
+            >
+                {{ destino.nombre }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <button class="btn btn-success">
+        Actualizar
+    </button>
+
+</form>
+
+{% endblock %}

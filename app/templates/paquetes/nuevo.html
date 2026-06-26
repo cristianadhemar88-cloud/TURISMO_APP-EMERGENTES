@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Nuevo Paquete Turístico</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        <input type="text" name="nombre" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        <textarea name="descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Precio</label>
+        <input type="number" step="0.01" name="precio" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Duración</label>
+        <input type="text" name="duracion" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Destino</label>
+
+        <select name="destino_id" class="form-control">
+
+            {% for destino in destinos %}
+
+            <option value="{{ destino.id }}">
+                {{ destino.nombre }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <button class="btn btn-success">
+        Guardar
+    </button>
+
+</form>
+
+{% endblock %}

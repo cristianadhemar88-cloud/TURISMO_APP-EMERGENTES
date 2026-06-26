@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Reservas</h2>
+
+<a href="/reservas/nuevo" class="btn btn-primary">
+    Nueva Reserva
+</a>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Paquete</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for reserva in reservas %}
+
+    <tr>
+
+        <td>{{ reserva.id }}</td>
+        <td>{{ reserva.cliente.nombre }}</td>
+        <td>{{ reserva.paquete.nombre }}</td>
+        <td>{{ reserva.fecha }}</td>
+        <td>{{ reserva.estado }}</td>
+
+        <td>
+
+            {% if current_user.rol.nombre != "Cliente" %}
+
+                <a href="/reservas/editar/{{ reserva.id }}"
+                    class="btn btn-warning btn-sm">
+                        Editar
+                </a>
+
+                <a href="/reservas/eliminar/{{ reserva.id }}"
+                    class="btn btn-danger btn-sm">
+                        Eliminar
+                </a>
+
+            {% else %}
+
+                <span class="badge bg-secondary">
+                    Consulta
+                </span>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

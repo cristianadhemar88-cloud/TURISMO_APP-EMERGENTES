@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Editar Reserva</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+
+        <label>Cliente</label>
+
+        <select name="cliente_id"
+                class="form-control">
+
+            {% for cliente in clientes %}
+
+            <option value="{{ cliente.id }}"
+            {% if cliente.id == reserva.cliente_id %}
+                selected
+            {% endif %}
+            >
+                {{ cliente.nombre }} {{ cliente.apellido }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Paquete</label>
+
+        <select name="paquete_id"
+                class="form-control">
+
+            {% for paquete in paquetes %}
+
+            <option value="{{ paquete.id }}"
+            {% if paquete.id == reserva.paquete_id %}
+                selected
+            {% endif %}
+            >
+                {{ paquete.nombre }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Fecha</label>
+
+        <input type="date"
+               name="fecha"
+               class="form-control"
+               value="{{ reserva.fecha }}">
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Estado</label>
+
+        <select name="estado"
+                class="form-control">
+
+            <option {% if reserva.estado == 'Pendiente' %}selected{% endif %}>
+                Pendiente
+            </option>
+
+            <option {% if reserva.estado == 'Confirmada' %}selected{% endif %}>
+                Confirmada
+            </option>
+
+            <option {% if reserva.estado == 'Cancelada' %}selected{% endif %}>
+                Cancelada
+            </option>
+
+        </select>
+
+    </div>
+
+    <button class="btn btn-success">
+        Actualizar
+    </button>
+
+</form>
+
+{% endblock %}

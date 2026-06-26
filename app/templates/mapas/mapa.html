@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mapa SIG
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Mapa de Destinos Turísticos</h2>
+
+<div id="map" style="height:600px;"></div>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // Inicializar mapa centrado en Bolivia
+    var map = L.map('map').setView([-16.5, -68.15], 6);
+
+    // Capa OpenStreetMap
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        }
+    ).addTo(map);
+
+    // Marcadores desde la base de datos
+    {% for destino in destinos %}
+
+        {% if destino.latitud and destino.longitud %}
+
+        L.marker([
+            {{ destino.latitud }},
+            {{ destino.longitud }}
+        ])
+        .addTo(map)
+        .bindPopup(`
+            <strong>{{ destino.nombre }}</strong><br>
+            {{ destino.departamento }}
+        `);
+
+        {% endif %}
+
+    {% endfor %}
+
+</script>
+
+{% endblock %}

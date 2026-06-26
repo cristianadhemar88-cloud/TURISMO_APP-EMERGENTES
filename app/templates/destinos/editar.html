@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Editar Destino</h2>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Nombre</label>
+        <input type="text"
+               name="nombre"
+               class="form-control"
+               value="{{ destino.nombre }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Departamento</label>
+        <input type="text"
+               name="departamento"
+               class="form-control"
+               value="{{ destino.departamento }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Descripción</label>
+        <textarea name="descripcion"
+                  class="form-control">{{ destino.descripcion }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Latitud</label>
+        <input type="number"
+               step="any"
+               name="latitud"
+               class="form-control"
+               value="{{ destino.latitud }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Longitud</label>
+        <input type="number"
+               step="any"
+               name="longitud"
+               class="form-control"
+               value="{{ destino.longitud }}">
+    </div>
+
+    <button class="btn btn-success">
+        Actualizar
+    </button>
+
+</form>
+
+{% endblock %}

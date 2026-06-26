@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    📊 Panel Administrativo
+</h2>
+
+<div class="row g-4">
+
+    <!-- Clientes -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-users stat-icon"></i>
+
+                <h5>Total Clientes</h5>
+
+                <div class="stat-number">
+                    {{ total_clientes }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Destinos -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-plane stat-icon"></i>
+
+                <h5>Total Destinos</h5>
+
+                <div class="stat-number">
+                    {{ total_destinos }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Paquetes -->
+    <div class="col-md-3">
+        <div class="card bg-warning">
+            <div class="card-body">
+
+                <i class="fa-solid fa-suitcase stat-icon"></i>
+
+                <h5>Total Paquetes</h5>
+
+                <div class="stat-number">
+                    {{ total_paquetes }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagos -->
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-credit-card stat-icon"></i>
+
+                <h5>Total Pagos</h5>
+
+                <div class="stat-number">
+                    {{ total_pagos }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservas -->
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-calendar-check stat-icon"></i>
+
+                <h5>Total Reservas</h5>
+
+                <div class="stat-number">
+                    {{ total_reservas }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Ingresos -->
+    <div class="col-md-3">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-money-bill-wave stat-icon"></i>
+
+                <h5>Ingresos Totales</h5>
+
+                <div class="stat-number">
+                    Bs. {{ total_ingresos }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Facturas -->
+
+    <div class="col-md-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+
+                <i class="fa-solid fa-file-invoice stat-icon"></i>
+
+                <h5>Total Facturas</h5>
+
+                <div class="stat-number">
+                    {{ total_facturas }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Últimas Reservas -->
+
+<div class="card shadow mt-5">
+
+    <div class="card-header bg-primary text-white">
+
+        <h4>Últimas Reservas</h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Paquete</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for reserva in ultimas_reservas %}
+
+                <tr>
+
+                    <td>{{ reserva.id }}</td>
+
+                    <td>
+                        {{ reserva.cliente.nombre }}
+                    </td>
+
+                    <td>
+                        {{ reserva.paquete.nombre }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- Gráfico -->
+
+<div class="card shadow mt-5">
+
+    <div class="card-header bg-success text-white">
+
+        <h4>Estadísticas Generales</h4>
+
+    </div>
+
+    <div style="height:350px;">
+        <canvas id="graficoDashboard"></canvas>
+    </div>
+
+</div>
+
+<!-- Mapa -->
+
+<div class="card shadow mt-5">
+
+    <div class="card-header bg-info text-white">
+
+        <h4>Mapa de Destinos Turísticos</h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <div id="mapaDashboard"
+             style="height: 450px;">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('graficoDashboard');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: [
+            'Clientes',
+            'Destinos',
+            'Paquetes',
+            'Reservas',
+            'Facturas',
+            'Pagos'
+        ],
+
+        datasets: [{
+
+            label: 'Cantidad',
+
+            data: [
+                {{ total_clientes }},
+                {{ total_destinos }},
+                {{ total_paquetes }},
+                {{ total_reservas }},
+                {{ total_facturas }},
+                {{ total_pagos }}
+            ]
+
+        }]
+
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+
+});
+
+</script>
+
+<!-- Leaflet -->
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+var mapa = L.map('mapaDashboard')
+.setView([-16.5, -68.15], 6);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    attribution: '&copy; OpenStreetMap'
+}
+).addTo(mapa);
+
+{% for destino in destinos %}
+
+L.marker([
+    {{ destino.latitud }},
+    {{ destino.longitud }}
+])
+.addTo(mapa)
+.bindPopup(
+    "<b>{{ destino.nombre }}</b>"
+);
+
+{% endfor %}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Paquetes Turísticos</h2>
+
+{% if current_user.rol.nombre != "Cliente" %}
+<a href="/paquetes/nuevo" class="btn btn-primary">
+    Nuevo
+</a>
+{% endif %}
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Duración</th>
+            <th>Destino</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for paquete in paquetes %}
+
+    <tr>
+        <td>{{ paquete.id }}</td>
+        <td>{{ paquete.nombre }}</td>
+        <td>{{ paquete.precio }}</td>
+        <td>{{ paquete.duracion }}</td>
+        <td>{{ paquete.destino.nombre }}</td>
+
+        <td>
+
+            {% if current_user.rol.nombre != "Cliente" %}
+
+                <a href="/paquetes/editar/{{ paquete.id }}"
+                    class="btn btn-warning btn-sm">
+                        Editar
+                </a>
+
+                <a href="/paquetes/eliminar/{{ paquete.id }}"
+                    class="btn btn-danger btn-sm">
+                        Eliminar
+                </a>
+            
+            {% else %}
+
+                <span class="badge bg-secondary">
+                    lectura
+                </span>
+
+            {% endif %}
+
+        </td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

@@ -32,13 +32,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         width:260px;
         height:100vh;
         background:linear-gradient(
-            180deg,
+        180deg,
             #0d6efd,
             #003b95
         );
         color:white;
         padding-top:20px;
         box-shadow:5px 0 20px rgba(0,0,0,.15);
+
+        transition:transform .35s ease;
+
+        z-index:1050;
     }
 
     .logo{
@@ -95,32 +99,31 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         opacity:.7;
     }
 
-    /* ===== CELULARES ===== */
-    @media (max-width: 768px) {
+    @media (max-width:768px){
 
-    .sidebar{
-        display:none;
+        .sidebar{
+
+            display:block;
+
+            transform:translateX(-100%);
+
+        }
+
+        .sidebar.active{
+
+            transform:translateX(0);
+
+        }
+
+        .content{
+
+            margin-left:0;
+
+            padding:15px;
+
+        }
+
     }
-
-    .content{
-        margin-left:0;
-        padding:15px;
-    }
-
-    .topbar h3{
-        font-size:22px;
-        text-align:center;
-    }
-
-    .stat-number{
-        font-size:30px;
-    }
-
-    .stat-icon{
-        font-size:30px;
-    }
-
-}
 
 </style>
 
@@ -147,6 +150,18 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <div class="logo">
     🌎 Turismo App
+</div>
+
+<div class="d-md-none text-end pe-3">
+
+    <button
+        class="btn btn-light btn-sm"
+        onclick="mostrarMenu()">
+
+        ✖
+
+    </button>
+
 </div>
 
 {% if current_user.is_authenticated %}
@@ -292,20 +307,7 @@ function mostrarMenu(){
 
     const menu = document.querySelector(".sidebar");
 
-    if(menu.style.display=="block"){
-
-        menu.style.display="none";
-
-    }else{
-
-        menu.style.display="block";
-
-        menu.style.position="fixed";
-        menu.style.zIndex="9999";
-        menu.style.width="260px";
-        menu.style.height="100vh";
-
-    }
+    menu.classList.toggle("active");
 
 }
 

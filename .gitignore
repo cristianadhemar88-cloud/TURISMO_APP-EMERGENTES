@@ -5,11 +5,6 @@ venv/
 __pycache__/
 *.py[cod]
 
-# Base de datos SQLite
-instance/
-*.db
-*.sqlite3
-
 # VS Code
 .vscode/
 

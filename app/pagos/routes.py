@@ -1,10 +1,11 @@
 from flask import render_template, redirect, request, url_for, abort
 
 from . import pagos_bp
-from ..models import Pago, Reserva
+from ..models import Pago, Reserva, Factura
 from datetime import datetime
 from ..extensions import db
-from flask_login import login_required, current_user
+from flask_login import current_user
+
 
 @pagos_bp.route("/")
 def listar_pagos():
@@ -16,9 +17,10 @@ def listar_pagos():
         pagos=pagos
     )
 
+
 @pagos_bp.route("/nuevo", methods=["GET", "POST"])
 def nuevo_pago():
-    
+
     if current_user.rol.nombre == "Cliente":
         abort(403)
 
@@ -61,10 +63,9 @@ def nuevo_pago():
     )
 
 
-@pagos_bp.route("/editar/<int:id>",
-                methods=["GET", "POST"])
+@pagos_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_pago(id):
-    
+
     if current_user.rol.nombre == "Cliente":
         abort(403)
 
@@ -108,19 +109,33 @@ def editar_pago(id):
         pago=pago,
         reservas=reservas
     )
-    
+
 
 @pagos_bp.route("/eliminar/<int:id>")
 def eliminar_pago(id):
-    
+
     if current_user.rol.nombre == "Cliente":
         abort(403)
 
     pago = Pago.query.get_or_404(id)
 
-    db.session.delete(pago)
+    try:
 
-    db.session.commit()
+        facturas = Factura.query.filter_by(
+            pago_id=pago.id
+        ).all()
+
+        for factura in facturas:
+            db.session.delete(factura)
+
+        db.session.delete(pago)
+
+        db.session.commit()
+
+    except Exception as e:
+
+        db.session.rollback()
+        raise e
 
     return redirect(
         url_for(

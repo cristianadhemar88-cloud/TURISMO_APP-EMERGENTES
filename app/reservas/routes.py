@@ -1,13 +1,16 @@
 from flask import render_template, request, redirect, url_for, abort
+
 from . import reservas_bp
-from ..models import Reserva
 from datetime import datetime
 from flask_login import login_required, current_user
+
 from ..extensions import db
 from ..models import (
     Reserva,
     Cliente,
-    Paquete
+    Paquete,
+    Pago,
+    Factura
 )
 
 
@@ -56,16 +59,16 @@ def nueva_reserva():
 
     paquetes = Paquete.query.all()
 
-    return render_template( 
-        "reservas/nuevo.html", 
-        clientes=clientes, 
-        paquetes=paquetes 
+    return render_template(
+        "reservas/nuevo.html",
+        clientes=clientes,
+        paquetes=paquetes
     )
 
 
 @reservas_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar_reserva(id):
-    
+
     if current_user.rol.nombre == "Cliente":
         abort(403)
 
@@ -110,15 +113,37 @@ def editar_reserva(id):
 
 @reservas_bp.route("/eliminar/<int:id>")
 def eliminar_reserva(id):
-    
+
     if current_user.rol.nombre == "Cliente":
         abort(403)
 
     reserva = Reserva.query.get_or_404(id)
 
-    db.session.delete(reserva)
+    try:
 
-    db.session.commit()
+        pagos = Pago.query.filter_by(
+            reserva_id=reserva.id
+        ).all()
+
+        for pago in pagos:
+
+            facturas = Factura.query.filter_by(
+                pago_id=pago.id
+            ).all()
+
+            for factura in facturas:
+                db.session.delete(factura)
+
+            db.session.delete(pago)
+
+        db.session.delete(reserva)
+
+        db.session.commit()
+
+    except Exception as e:
+
+        db.session.rollback()
+        raise e
 
     return redirect(
         url_for(
